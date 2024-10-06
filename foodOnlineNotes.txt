@@ -1,0 +1,912 @@
+
+
+
+
+
+7. Gitbash Vscode Installation
+4min
+
+8. Create Virtual Environment
+4min
+
+9. Install Django & Start Project
+5min
+
+10. Introducing 1:1 Mentorship – Personalized Guidance for Your Learning Journey!
+1min
+
+11. Hello World
+5min
+create urls.py for homepage
+create views.py for home view
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.shortcuts import render
+from django.http import HttpResponse
+
+
+def home(request):
+    #return HttpResponse('Hello World!!!') # To test http response
+	return render(request, 'home.html')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+12. GitHub Setup
+7min
+…or create a new repository on the command line
+
+echo "# foodOnline" >> README.md
+git init
+git config --global --add safe.directory E:/devapps/django/foodOnline
+git add -A
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/samvura/foodOnline.git
+git push -u origin main
+
+…or push an existing repository from the command line
+
+git remote add origin https://github.com/samvura/foodOnline.git
+git branch -M main
+git push -u origin main
+
+13. FoodOnline Full Project Git Repository
+1min
+
+14. Django Templates Setup
+2min
+Create templates folder
+create home.html file
+
+update settings.py Templates function, 'DIRS': ['templates'],
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+15. Create Superuser
+2min
+Run commands:
+python manage.py migrate
+python manage.py createsuperuser
+
+16. Purchase Foodbakery Template
+4min
+
+17. Download 5 Pre-Built Premium Templates for FREE
+1min
+
+18. Template Walkthrough
+3min
+
+19. Homepage And Static Files Config
+19min
+Create static folder in root directory
+Copy Assets to static folder
+Configure static url in settings.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR /'static'
+STATICFILES_DIRS = [
+    'foodOnline_main/static'
+]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+update home.html with {% load static %}
+
+~~~~~~~~~~~~~~~~~~~
+{% load static %}
+~~~~~~~~~~~~~~~~~~~
+
+update assets with "{% static '*****' %}"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	<!-- CSS -->
+	<link href="{% static 'css/iconmoon.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/cs-foodbakery-plugin.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="{% static 'assets/css/bootstrap-slider.css' %}" rel="stylesheet">
+	
+	<!-- JAVASCRIPT -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="{% static 'assets/js/modernizr.js' %}"></script>
+	<script src="{% static 'assets/js/bootstrap.js' %}"></script>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+20. Collectstatic
+5min
+Run collectstatic to ensure all static files are uploaded into production
+python manage.py collectstatic
+
+    
+21. Why Postgres Intro
+4min
+Install Postgresql
+Add/Create Database
+
+    
+22. Postgres Configuration With Django
+8min
+
+Update settings.py configuration with DB credentials
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'foodOnline_db',
+        'USER': '****',
+        'PASSWORD': '****',
+        'HOST': 'localhost',
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run pip install psycopg2
+    
+23. Store Sensitive Info And Push Code
+13min
+
+    
+24. Cutom User Model
+29min
+    
+25. Recreate Table And Register User Model
+12min
+    
+26. Make Password Noneditable
+6min
+    
+27. Userprofile Overview
+3min
+    
+28. User Profile Model
+13min
+    
+29. Media Files Configuration
+5min
+    
+30. Django Signals To Create User Profile
+22min
+
+    
+31. Foodonline Flowchart
+11min
+    
+32. User registration Path
+6min
+    
+33. Template Inheritance Base Html
+16min
+    
+34. User Registration Form Template
+6min
+    
+35. User Registration Form Implementation
+24min
+    
+36. Hash The Password From Form
+7min
+    
+37. Django Field Errors And Non Field Errors
+15min
+    
+38. Django Messages
+14min
+    
+39. Messages Animation
+11min
+    
+40. Frontend Tweaks
+12min
+    
+41. Git Push
+2min
+
+    
+42. Vendor Model
+12min
+    
+43. Vendor Registration Template
+5min
+    
+44. Vendor Registration Feature
+25min
+    
+45. Vendor Admin Config
+3min
+    
+46. Login Page Setup
+12min
+    
+47. Login Logout Feature
+19min
+    
+48. Restrict Loggedin Users From Accessing Loginpage And Register Page
+5min
+    
+49. Detect User And Redirect Him To Respective Dashboard
+18min
+    
+50. Restrict The User To Access Unauthorized Pages
+11min
+    
+51. Git Push
+1min
+
+    
+52. Email Configuration
+5min
+    
+53. Send Verification Email
+20min
+    
+54. Activating The User
+14min
+    
+55. Forgot Password Setup
+9min
+    
+56. Forgot Password Send Validation Link
+15min
+    
+57. Reset Password Feature
+14min
+    
+58. Git Push
+1min
+
+    
+59. Admin Approval Email
+22min
+    
+60. Setup Cust And Vendor Dashboard Frontend
+13min
+    
+61. Dashboard Sidebar Icon Fix
+2min
+    
+62. Vendor Dashboard Url Setup
+18min
+    
+63. Load Vendor Profile Image Dynamically
+11min
+    
+64. Get Vendor Context Processor
+5min
+    
+65. Fix Anonymous User Error In Context Processors
+3min
+    
+66. Make Dashboard Cards
+6min
+    
+67. Git Push
+1min
+
+    
+68. Restaurant Profile Form Setup
+24min
+    
+69. Store Vendor Profile
+7min
+    
+70. Custom Validator Function Allow Only Images
+17min
+    
+71. Readonly Latlong And Apply Decorator
+8min
+    
+72. Prepare Address Field For Google Geocoding
+8min
+    
+73. Git Push
+1min
+
+    
+74. Setup Google Maps Billing Account
+9min
+    
+75. Enable Apis And Create Api Key
+4min
+    
+76. Implement Google Autocomplete
+14min
+    
+77. Get The Lat Long And Assign To Form Field
+18min
+    
+78. Loop Through Address Components And Fetch Data
+15min
+    
+79. Git Push
+1min
+
+    
+80. Foodmenu Models Category And Fooditem Models
+13min
+    
+81. Add Test Food And Setup Admin Table
+12min
+    
+82. Menu Builder Url And View Setup
+6min
+    
+83. Menu Builder Category Frontend Part1
+18min
+    
+84. Menu Builder Fooditem Front End
+20min
+    
+85. Add Category CRUD
+23min
+    
+86. Add Category Handle Error
+6min
+    
+87. Edit Category CRUD
+11min
+    
+88. Delete Category CRUD
+6min
+    
+89. Git Push
+1min
+
+    
+90. Add Food Crud
+22min
+    
+91. Edit Food Crud
+13min
+    
+92. Delete Food Crud
+8min
+    
+93. Url Path Adjustment And Availablity Badge
+4min
+    
+94. Handle Empty Value Errors
+16min
+    
+95. Mofidy The Form To Show Category Belongs To Loggedin Vendors
+6min
+    
+96. Edit Food Category For Loggedin Vendors
+1min
+    
+97. Git Push
+1min
+
+    
+98. Show Vendors On Homepage
+15min
+    
+99. Marketplace Button And Url Setup
+8min
+    
+100. Marketplace Html And View
+13min
+    
+101. Edit Vendor Model And Add Slug Field
+11min
+    
+102. Vendor Detail Page Setup
+15min
+    
+103. Dis Fooditems By Category Using Prefetch Related
+15min
+
+    
+104. Create Cart Model
+6min
+    
+105. Add To Cart Url Setup
+10min
+    
+106. Add To Cart Sending Ajax Request
+9min
+    
+107. Add To Cart View Functionality Edited
+14min
+    
+108. Cart Counter Context Processor
+10min
+    
+109. Place The Quantiry On Each Food Item
+11min
+    
+110. Update The Cart Counter And Item Qty Realtime
+11min
+    
+111. Fix Google Maps Script Issue
+2min
+    
+112. Decrease Cart Feature Edited
+16min
+    
+113. Implement Sweetalert And Handle Messages
+12min
+
+    
+114. Cart Url Setup
+6min
+    
+115. Cart Page Content Setup
+11min
+    
+116. Cart Items In The Cart
+8min
+    
+117. Fix Cart Item Quantity
+1min
+    
+118. Delete Cart Item
+14min
+    
+119. Remove Cart Item Without Reloading The Page
+6min
+    
+120. Check If Cart Is Empty
+5min
+    
+121. Handle Decrease Cart Use Cases
+10min
+    
+122. Show Vendor Name Badge And Add Order By Clause
+5min
+    
+123. Get Cart Amounts Function To Get The Subtotal And Grand Total
+8min
+    
+124. Update Subtotal Tax Grandtotal Without Refreshing The Page
+13min
+    
+125. Git Push
+1min
+
+    
+126. Search Functionality Setup Search Bar
+22min
+    
+127. Get Query Parameters From The Get Request
+7min
+    
+128. Add Some Restaurants And Fooditems--Attach Checklist
+14min
+    
+129. Basic Search For Restaurants
+7min
+    
+130. Smart Search For Restaurants By Fooditem Name
+12min
+
+    
+131. Location based Search Requirements
+1min
+    
+132. Geodjango Overview
+3min
+    
+133. Install Postgis And Gdal
+9min
+    
+134. Create Location Point And See Geometry Viewer
+17min
+    
+135. Location Based Search For Restaurants
+9min
+    
+136. Find The Nearby Restaurants
+12min
+    
+137. Git Push
+1min
+
+    
+138. Get Current Latitude Longitude
+11min
+    
+139. Send Ajax Request To Get Current Address
+13min
+    
+140. Show Nearby Restaurants On Homepage
+12min
+    
+141. Set The Location In Session Variable
+12min
+    
+142. Git Push
+1min
+
+    
+143. Opening Hours Overview
+2min
+    
+144. Opening Hour Model
+20min
+    
+145. Opening Hours Url And Sidebar
+5min
+    
+146. Opening Hours Form
+15min
+    
+147. Add Hour Url And Function
+9min
+    
+148. Minor Adjustment To The Add Hour Form
+6min
+    
+149. Send Ajax Request To Add Hour Function
+13min
+    
+150. Add Hour To Database And Jsonresponse
+23min
+    
+151. Handling Integrity Error
+7min
+    
+152. Remove Opening Hour Feature
+22min
+    
+153. Create Some Opening Hours-And Fix Unique Together Issue
+2min
+    
+154. List Down Opening Hours In The Front End
+16min
+    
+155. Determine Opeining Hour For Vendor Detail Page
+14min
+    
+156. Is Open Member Function To Dis Open Close Badge
+12min
+    
+157. Git Push
+1min
+
+    
+158. Dynamic Tax Module Create Model
+8min
+    
+159. Calculate Tax Amount
+10min
+    
+160. Implement Dynamic Tax In The Cart Page
+8min
+    
+161. Update Tax In The Frontend
+12min
+    
+162. Fixed Timedata Doesnot Match Issue
+2min
+    
+163. Git Push
+1min
+
+    
+164. Create Customers App
+6min
+    
+165. Customer Profile Path And Page
+10min
+    
+166. Profile Form And User Form
+7min
+    
+167. Prepopulate Forms
+9min
+    
+168. Update Customer Profile
+7min
+    
+169. Load Cover And Profile Pictures
+8min
+    
+170. Git Push
+1min
+
+    
+171. Order, Payment, and OrderedFood Models
+8min
+    
+172. Checkout Page Setup
+5min
+    
+173. Checkout Page Part 1
+3min
+    
+174. Checkout Page Order Form Part 2
+11min
+    
+175. List Cart Items In Checkout Page
+9min
+    
+176. Prepopulate Billing Form
+8min
+
+    
+177. Payment Gateway Selection On Checkout Page
+10min
+    
+178. Payment Method Selection Validation
+11min
+    
+179. Make Place Order Path And Page
+7min
+    
+180. Place Order View
+17min
+    
+181. Generate Order Number
+9min
+
+    
+182. Create Paypal Business Account
+3min
+    
+183. Create Paypal Sandbox Accounts
+10min
+    
+184. Paypal Checkout Button Implementation
+13min
+    
+185. Send Transaction Function
+16min
+    
+186. Update Place Order Page With Review Order And Cart Items
+10min
+    
+187. Store Payment Object And Update Order
+13min
+
+    
+188. Move Cart Items To Ordered Food And Create Tabular Inline
+12min
+    
+189. Send Order Confirmation Email To Customer
+11min
+    
+190. Send Order Received Email To Vendor And Clear Cart
+15min
+    
+191. Order Completion Page Setup
+9min
+    
+192. Order Complete View
+4min
+    
+193. Implement Order Completion Page-Part1
+15min
+    
+194. Implement Order Completion Page Part2
+12min
+    
+195. Print Address On Order Complete Page
+2min
+    
+196. Git Push
+1min
+
+    
+197. Show Payment Button Based On Payment Method Selected
+3min
+    
+198. Razorpay Basic Configuration
+6min
+    
+199. Create Rzp Order
+8min
+    
+200. Razorpay Checkout
+14min
+    
+201. Finalize Razorpay Payments
+7min
+    
+202. Git Push
+1min
+
+    
+203. Customer Dashbord Recent Orders
+14min
+    
+204. Customer My Orders
+7min
+    
+205. Order Detail Setup
+6min
+    
+206. Order Detail Page Finish
+12min
+    
+207. Git Push
+1min
+
+    
+208. Many To Many Relationship Overview
+10min
+    
+209. Many To Many Create Field And Test Orders
+12min
+    
+210. Total Orders Vendor Dashboard
+7min
+    
+211. Recent Orders Vendor Dashboard
+5min
+    
+212. Assign Vendors To Order
+5min
+    
+213. Order Detail Page Vendor
+12min
+    
+214. Calculate Subtotal For Each Vendor
+29min
+
+    
+215. Create Custom Middleware And Get Total By Vendor Function
+13min
+    
+216. Calculate Vendor Order Total Data
+14min
+    
+217. Update Total In Order Detail Page
+4min
+    
+218. Calculate Total Revenue Per Vendor
+5min
+    
+219. Calculate Current Month Revenue
+6min
+    
+220. Vendor My Orders
+8min
+    
+221. Implement Datatable Plugin For Pagination And Realtime Order Search
+7min
+    
+222. Payout System Announcement
+2min
+    
+223. Git Push
+1min
+
+    
+224. Register User Account Email Template
+10min
+    
+225. Order Confirmation Email To Customer Template Part 1
+17min
+    
+226. Order Confirmation Email To Customer Template Part 2
+7min
+    
+227. Order Received Email Template To Vendor
+18min
+    
+228. Git Push
+1min
+
+    
+229. Responsiveness-Part-1
+17min
+    
+230. Responsiveness-Part-2
+10min
+
+
+231. Linode Overview
+2min
+
+232. Server Overview
+4min
+
+233. How Nginx And Gunicorn Works Together
+8min
+
+234. Deployment Checklist
+3min
+
+235. Signup to Linode & Create Server
+8min
+
+236. Create Domain Nameservers
+5min
+
+237. Basic Server Setup - Create a Sudo User
+9min
+
+238. Possible deployment issues & Get the local code ready to be pushed to server
+10min
+
+239. Setup GIT to push code from local server to live server
+12min
+
+240. Install & Configure PostgreSQL on Live Server
+5min
+
+241. Setup Virtual Environment on Live Server
+5min
+
+242. Install GDAL and PostGIS on Live Server
+14min
+
+243. Dumpdata and Loaddata on Live Server
+7min
+
+244. Gunicorn Configuration
+4min
+
+245. Nginx Configuration
+6min
+
+246. Fix Static Files on Server
+2min
+
+247. Install SSL on Live Site
+3min
+
+248. Uncomment user's current location code for live website
+3min
+
+249. Congratulations! You made it!
+
+1min
+
+information alert
+Python Django Multi-Vendor Restaurant Ecommerce with location based search, nearby restaurants. Beginner to Expert
+
+37.5 hours
+Total
+
+English
+English [Auto]
+Topics
+
+    Get user's current location & show nearby restaurants
+    Cart functionalities with AJAX request
+    ManyToMany Relationships
+    RazorPay Payment Gateway
+    Dynamic Business hours module with AJAX
+    Make a real world Multi vendor platform using Python and Django Framework
+    Purchase & Implement template
+    PostgreSQL Database Configuration
+    Custom user model, Media files & Django signals
+    User Registration, Django messages and errors
+    Vendor registration and authentication functionalities
+    Token verification & Email configuration
+    Vendor approval by admin, dashboards
+    Make restaurant profile form & custom validators
+    Implement Google Autocomplete field
+    Menu Builder - Category CRUD functionalities
+    Menu Builder - Food Items CRUD functionalities
+    Location based search functionalities with nearby restaurants
+    Marketplcae implementation
+    Basic & Smart search functionalities
+    Dynamic Tax Module
+    Orders model and checkout page
+    Place order and generate order number
+    Implement PayPal payment gateway
+    After order functionalities
+    Integrate Email Templates
+    Make the site mobile-friendly (responsive)
+
+Description
+
+Welcome to the Project-Based Django Web Development where we develop a fully-featured Multi-vendor Restaurant Marketplace website with location-based search, nearby restaurants, and many more complex functionalities.
+
+I designed this build based on a Django-based custom web application. By the end of this project, you will be able to analyze, design, and develop your own Multi-vendor Restaurant Marketplace website and deploy it on the live server with the custom domain name.
+
