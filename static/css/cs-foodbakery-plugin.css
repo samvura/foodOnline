@@ -75,7 +75,7 @@
 .login-form .alert button.close { color: #aaa; font-size: 24px; opacity: 1; position: absolute; right: 15px; top: 10px; }
 .login-form .alert-danger p { color: #b63a2b !important; font-size: 13px; }
 .login-form .alert-success p { color: #3C0 !important; }
-/* resturant detail menu start */
+/* business detail menu start */
 .login-form .g-recaptcha { -webkit-transform: scale(1.15); -moz-transform: scale(1.1); -ms-transform: scale(1.1); transform: scale(1.1); -webkit-transform-origin: 0 0; -moz-transform-origin: 0 0; -ms-transform-origin: 0 0; transform-origin: 0 0; }
 .login-form .recaptcha-reload { margin-bottom: 30px; }
 .restaurant-detail-image-section { background: #ccc; margin-bottom: 60px; padding: 102px 0; position: relative; }
@@ -126,7 +126,7 @@
 .delivery-timing ul li ul.delivery-dropdown li > a .opend-day { width: 85px; }
 .delivery-timing ul li ul.delivery-dropdown li > a .opend-time { width: -webkit-calc(100% - 85px); width: calc(100% - 85px); width: -moz-calc(100% - 85px); padding-left: 13px; position: relative; }
 .delivery-timing ul li ul.delivery-dropdown li > a .opend-time small { position: absolute; left: 4px; top: 0; }
-/* resturant detail menu end */
+/* business detail menu end */
 .listing-main-search { text-align: center; width: 58.33333333%; margin: 0 auto; }
 .main-search .row { margin-right: -10px; margin-left: -10px; }
 .main-search [class*="col-lg"], .main-search [class*="col-md"], .main-search [class*="col-sm"], .main-search [class*="col-xs"] { padding: 0 10px; }

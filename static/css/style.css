@@ -2578,11 +2578,11 @@ a.slicknav_btn.slicknav_open .slicknav_icon-bar:first-child { position: absolute
 .pagination-sm .prev, .pagination-sm .next { padding: 0; border: 0; width: auto; }
 .pagination > .active > span a, .pagination li span a { display: block; -webkit-box-shadow: none; box-shadow: none; }
 /* pagination Style End */
-/* resturant listing start */
+/* business listing start */
 .sub-header .text-holder { margin: 0 0 10px 0; }
 .sub-header .text-holder h2 { color: #fff; margin: 0 0 10px 0; font: 700 28px/30px 'Montserrat', sans-serif; letter-spacing: 0; word-spacing: 1px; text-transform: none; }
 .sub-header .text-holder p { color: #fff; margin: 0; font: 400 16px/22px 'Open Sans', sans-serif; letter-spacing: 0; word-spacing: 0; text-transform: none; }
-/* resturant listing end */
+/* business listing end */
 /* how it work */
 .image-frame.fancy.align-left { text-align: left; }
 .image-frame.fancy .img-holder { margin: 25px 0 0; padding-left: 25px; }

@@ -158,27 +158,231 @@ Run pip install psycopg2
 23. Store Sensitive Info And Push Code
 13min
 
+pip install python-decouple
+
+Create .env file and update settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY=
+DEBUG=
+
+# Database configuration
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 24. Cutom User Model
 29min
+Create accounts app
+create models and update suer configurations
+drop database and recreate new db with fresh migration to use custome db
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
+# Create your models here.
+class UserManager(BaseUserManager):
+    def create_user(self, first_name, last_name, username, email, password=None):
+        if not email:
+            raise ValueError('User must have an email address')
+        
+        if not username:
+            raise ValueError('User must have a username')
+        
+        user = self.model(
+            email = self.normalize_email(email),
+            username = username,
+            first_name = first_name,
+            last_name = last_name,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self,first_name, last_name, username, email, password=None):
+        user = self.create_user(
+            email = self.normalize_email(email),
+            username = username,
+            password = password,
+            first_name = first_name,
+            last_name = last_name
+        )
+        user.is_admin = True
+        user.is_active = True
+        user.is_staff = True
+        user.is_superadmin = True
+        user.save(using=self._db)
+        return user
+
+class User(AbstractBaseUser):
+    BUSINESS = 1
+    CUSTOMER = 2
+    
+    ROLE_CHOICE = (
+        (BUSINESS, 'Business'),
+        (CUSTOMER, 'Customer'),
+    )
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
+    email = models.CharField(max_length=100, unique=True)
+    phone_number = models.CharField(max_length=12, blank=True)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICE, blank=True, null=True)
+    
+    # Required Fields
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    
+    objects = UserManager()
+    
+    def __str__(self):
+        return self.email
+    
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+    
+    def has_module_perms(self, app_label):
+        return True
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
     
 25. Recreate Table And Register User Model
 12min
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+in admin.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from .models import User
+
+# Register your models here.
+
+admin.site.register(User)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 26. Make Password Noneditable
 6min
+In admin.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.contrib.auth.admin import UserAdmin
+
+# Register your models here.
+
+class CustomUserAdmin(UserAdmin):
+	list_display = ('email', 'first_name', 'last_name', 'username', 'role', 'is_active')
+    ordering = ('-date_joined',)
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
+
+admin.site.register(User, CustomUserAdmin)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 27. Userprofile Overview
 3min
     
 28. User Profile Model
 13min
-    
+in models.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.db.models.fields.related import ForeignKey, OneToOneField
+
+class UserProfile(models.Model):
+    user = OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='users/profile_pictures', blank=True, null=True)
+    cover_photo = models.ImageField(upload_to='users/cover_photos', blank=True, null=True)
+    address = models.CharField(max_length=250, blank=True, null=True)
+    country = models.CharField(max_length=15, blank=True, null=True)
+    state_or_county = models.CharField(max_length=15, blank=True, null=True)
+    city = models.CharField(max_length=15, blank=True, null=True)
+    post_code = models.CharField(max_length=7, blank=True, null=True)
+    latitude = models.CharField(max_length=20, blank=True, null=True)
+    longitude = models.CharField(max_length=20, blank=True, null=True)
+    #location = gismodels.PointField(blank=True, null=True, srid=4326)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+in admin.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from .models import User, UserProfile
+
+admin.site.register(UserProfile)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+
 29. Media Files Configuration
 5min
-    
+Create Media folder in root folder
+in settings.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR /'media'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+in urls.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.conf import settings
+from django.conf.urls.static import static
+
+ + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 30. Django Signals To Create User Profile
 22min
+in models.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    def save(self, *args, **kwargs):
+        if self.latitude and self.longitude:
+            self.location = Point(float(self.longitude), float(self.latitude))
+            return super(UserProfile, self).save(*args, **kwargs)
+        return super(UserProfile, self).save(*args, **kwargs)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+in apps.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    def ready(self):
+        import accounts.signals
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+in signals.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+from .models import User, UserProfile
+
+
+@receiver(post_save, sender=User)
+def post_save_create_profile_receiver(sender, instance, created, **kwargs):
+    print(created)
+    if created:
+        UserProfile.objects.create(user=instance)
+    else:
+        try:
+            profile = UserProfile.objects.get(user=instance)
+            profile.save()
+        except:
+            # Create the userprofile if not exist
+            UserProfile.objects.create(user=instance)
+
+
+@receiver(pre_save, sender=User)
+def pre_save_profile_receiver(sender, instance, **kwargs):
+    pass
+# post_save.connect(post_save_create_profile_receiver, sender=User)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
     
 31. Foodonline Flowchart
@@ -186,9 +390,14 @@ Run pip install psycopg2
     
 32. User registration Path
 6min
+in urls.py add includes to imports
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.urls import path, include
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 33. Template Inheritance Base Html
 16min
+Split header, body and footer
     
 34. User Registration Form Template
 6min
@@ -214,13 +423,66 @@ Run pip install psycopg2
 41. Git Push
 2min
 
+git status
+git add -A
+git commit -m "homepage setup and register user functions"
+git push origin main
     
 42. Vendor Model
 12min
+python manage.py vendor
+update settings.py "installed_apps" with 'vendor',
+create urls.py file
+create model in models.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+from django.db import models
+from accounts.models import User, UserProfile
+
+class Vendor(models.Model):
+    user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE)
+    user_profile = models.OneToOneField(UserProfile, related_name='userprofile', on_delete=models.CASCADE)
+    vendor_name = models.CharField(max_length=50)
+    vendor_slug = models.SlugField(max_length=100, unique=True)
+    vendor_license = models.ImageField(upload_to='vendor/license')
+    is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.vendor_name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+in admin.py - register vendordashboard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from django.contrib import admin
+from vendor.models import Vendor
+
+# Register your models here.
+
+admin.site.register(Vendor)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+run 
+python manage.py makemigrations
+python manage.py migrate
+
+git status
+git add -A
+git commit -m "vendor model creation"
+git push origin main
     
 43. Vendor Registration Template
 5min
-    
+In accounts/urls.py - add path for vendor rel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ path('registerVendor/', views.registerVendor, name='registerVendor'),
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In accounts/views.py    Create function for register vendor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 44. Vendor Registration Feature
 25min
     
@@ -236,11 +498,25 @@ Run pip install psycopg2
 48. Restrict Loggedin Users From Accessing Loginpage And Register Page
 5min
     
-49. Detect User And Redirect Him To Respective Dashboard
+49. Detect User And Redirect User To Respective Dashboard
 18min
     
 50. Restrict The User To Access Unauthorized Pages
 11min
+# Restrict the vendor from accessing the customer page
+def check_role_vendor(user):
+    if user.role == 1:
+        return True
+    else:
+        raise PermissionDenied
+
+
+# Restrict the customer from accessing the vendor page
+def check_role_customer(user):
+    if user.role == 2:
+        return True
+    else:
+        raise PermissionDenied
     
 51. Git Push
 1min

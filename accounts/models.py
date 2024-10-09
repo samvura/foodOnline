@@ -40,11 +40,11 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    BUSINESS = 1
+    VENDOR = 1
     CUSTOMER = 2
     
     ROLE_CHOICE = (
-        (BUSINESS, 'Business'),
+        (VENDOR, 'Business'),
         (CUSTOMER, 'Customer'),
     )
     first_name = models.CharField(max_length=50)
